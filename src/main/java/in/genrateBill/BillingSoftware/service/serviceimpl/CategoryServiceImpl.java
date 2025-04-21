@@ -5,8 +5,10 @@ import in.genrateBill.BillingSoftware.io.CategoryRequest;
 import in.genrateBill.BillingSoftware.io.CategoryResponse;
 import in.genrateBill.BillingSoftware.repository.CategoryRepository;
 import in.genrateBill.BillingSoftware.service.CategoryService;
+import in.genrateBill.BillingSoftware.service.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,10 +21,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    private final FileUploadService fileUploadService;
 
     @Override
-    public CategoryResponse add(CategoryRequest request) {
+    public CategoryResponse add(CategoryRequest request, MultipartFile file) {
+
+        String imgUrl = fileUploadService.uploadFile(file);
         CategoryEntity newCat = convertToEntity(request);
+        newCat.setImgUrl(imgUrl);
          newCat = categoryRepository.save(newCat);
             return   convertToResponse(newCat);
 
@@ -35,6 +41,14 @@ public class CategoryServiceImpl implements CategoryService {
               .map(categoryEntity -> convertToResponse(categoryEntity))
               .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public void delete(String categoryId) {
+        CategoryEntity existingCategory = categoryRepository.findByCategoryId(categoryId)
+                .orElseThrow(()->new RuntimeException("Category Not Found: "+categoryId ));
+            fileUploadService.deleteFile(existingCategory.getImgUrl());
+        categoryRepository.delete(existingCategory);
     }
 
     private CategoryResponse convertToResponse(CategoryEntity newCat) {
