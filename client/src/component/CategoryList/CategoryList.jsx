@@ -12,6 +12,23 @@ const CategoryList = () => {
         category.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const deleteByCategoryId = async (categoryId) =>{
+        try{
+            const response = await deleteCategory(categoryId);
+           if(response.status === 204){
+                const updatedCategories =  categories.filter(category => category.categoryId !== categoryId); 
+                setCategories(updatedCategories);
+              toast.success("category deleted");
+           }
+           else{
+                toast.error("unable to delete the category");
+           }
+        }
+        catch(error){
+            console.error(error);
+            toast.error("unable to delete the category");
+        }
+    }
 
 
     return (
@@ -44,7 +61,8 @@ const CategoryList = () => {
                                 </div>
                                 <div>
                                     <button className="btn btn-danger btn-sm"
-                                        >
+                                           onClick={() => deleteByCategoryId(category.categoryId)}
+                                           >
                                         <i className="bi bi-trash"></i>
                                     </button>
                                 </div>
