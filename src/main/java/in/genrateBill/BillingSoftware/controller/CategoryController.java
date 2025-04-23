@@ -17,12 +17,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/categories")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class CategoryController {
 
     private final CategoryService categoryService;
 
     //this 1st api endpoint it is for creating the category
-    @PostMapping("/data")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryResponse addCategory(@RequestPart("category") String categoryString,
                                         @RequestPart("file") MultipartFile file){
@@ -38,7 +39,7 @@ public class CategoryController {
     }
 
     //this 2nd api endpoint  it is for reading the category
-    @GetMapping("/read")
+    @GetMapping
     public List<CategoryResponse> fetchCategories(){
         return categoryService.read();
     }

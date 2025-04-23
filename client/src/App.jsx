@@ -6,10 +6,12 @@ import ManageItem from "./pages/ManageItem/ManageItem";
 import ManageCategory from "./pages/ManateCategory/ManageCategory";
 import ManageUsers from "./pages/ManageUsers/ManageUsers";
 
+
 const App = () => {
   return (
     <div>
       <Menubar />
+
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/category" element={<ManageCategory />} />
