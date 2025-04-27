@@ -15,15 +15,15 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/categories")
+
 @RequiredArgsConstructor
-@CrossOrigin("*")
+
 public class CategoryController {
 
     private final CategoryService categoryService;
 
     //this 1st api endpoint it is for creating the category
-    @PostMapping
+    @PostMapping("/admin/categories")
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryResponse addCategory(@RequestPart("category") String categoryString,
                                         @RequestPart("file") MultipartFile file){
@@ -46,7 +46,7 @@ public class CategoryController {
 
     //this 3rd api endpoint it is for deleting the category
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{categoryId}")
+    @DeleteMapping("/admin/categories/{categoryId}")
     public void remove(@PathVariable String categoryId ){
         try{
             categoryService.delete(categoryId);
